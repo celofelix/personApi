@@ -1,8 +1,9 @@
 package one.digitalinnovation.personapi.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class PersonService {
 
 		Person personToSave = personMapper.toModel(personDTO);
 		Person savedPerson = personRepository.save(personToSave);
-		return MessageResponseDTO.builder().message("Created Person with ID " + savedPerson.getId()).build();
+		return createMessaResponse(savedPerson.getId(), "Created Person with ID ");
 
 	}
 
@@ -40,15 +41,27 @@ public class PersonService {
 		Person person = verifyIfExists(id);
 		return personMapper.toDTO(person);
 	}
-	
 
 	public void delete(Long id) throws PersonNotFoundException {
-		verifyIfExists(id);	
-		
+		verifyIfExists(id);
+
 		personRepository.deleteById(id);
 	}
-	
+
+	public MessageResponseDTO updateById(Long id, @Valid PersonDTO personDTO) throws PersonNotFoundException {
+		verifyIfExists(id);
+
+		Person personToUpdate = personMapper.toModel(personDTO);
+		Person updatePerson = personRepository.save(personToUpdate);
+		return createMessaResponse(updatePerson.getId(), "Update Person with ID ");
+
+	}
+
 	private Person verifyIfExists(Long id) throws PersonNotFoundException {
 		return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+	}
+
+	private MessageResponseDTO createMessaResponse(Long id, String message) {
+		return MessageResponseDTO.builder().message(message + id).build();
 	}
 }
