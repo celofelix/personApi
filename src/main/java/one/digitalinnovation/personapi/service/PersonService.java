@@ -44,7 +44,6 @@ public class PersonService {
 
 	public void delete(Long id) throws PersonNotFoundException {
 		verifyIfExists(id);
-
 		personRepository.deleteById(id);
 	}
 
@@ -61,7 +60,7 @@ public class PersonService {
 		return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
 	}
 
-	private MessageResponseDTO createMessaResponse(Long id, String message) {
+	private MessageResponseDTO createMessaResponse(Object id, String message) {
 		return MessageResponseDTO.builder().message(message + id).build();
 	}
 }
