@@ -14,7 +14,7 @@ public class PersonService {
 
 	private PersonRepository personRepository;	
 	
-	private PersonMapper personMapper;	
+	private PersonMapper personMapper = PersonMapper.INSTANCE;	
 
 	@Autowired
 	public PersonService(PersonRepository personRepository) {
